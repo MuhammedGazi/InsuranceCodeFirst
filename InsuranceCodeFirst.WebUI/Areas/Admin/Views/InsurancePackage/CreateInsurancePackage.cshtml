@@ -1,8 +1,43 @@
-﻿
+﻿@model CreateInsurancePackageDto
 @{
     ViewData["Title"] = "CreateInsurancePackage";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>CreateInsurancePackage</h1>
+<div class="card">
+    <div class="card-header">
+        <h4 class="card-title">Yeni Sigorta Paketi Oluştur</h4>
+    </div>
+    <div class="card-body">
+        <form method="post">
+
+            <div class="form-group mb-3">
+                <label class="form-label">Paket Adı</label>
+                <input type="text" class="form-control" asp-for="InsurancePackageName" placeholder="Örn: Tam Kapsamlı Kasko" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Kategori</label>
+                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+                    <option value="">-- Lütfen bir kategori seçiniz --</option>
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Taban Fiyat (₺)</label>
+                <input type="number" class="form-control" asp-for="BasePrice" step="0.01" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label">Detaylar / Açıklama</label>
+                <textarea class="form-control" rows="4" asp-for="Details" placeholder="Paket içeriği hakkında bilgi..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-save"></i> Kaydet
+            </button>
+            <a href="/Admin/InsurancePackage/Index" class="btn btn-secondary">İptal</a>
+        </form>
+    </div>
+</div>
 

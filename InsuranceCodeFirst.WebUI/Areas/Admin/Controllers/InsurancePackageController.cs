@@ -1,12 +1,25 @@
-﻿using InsuranceCodeFirst.Business.Services.InsurancePackageServices;
+﻿using InsuranceCodeFirst.Business.Services.CategoryServices;
+using InsuranceCodeFirst.Business.Services.InsurancePackageServices;
 using InsuranceCodeFirst.DTO.DTOs.InsuranceDtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 namespace InsuranceCodeFirst.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class InsurancePackageController(IInsurancePackageService _service) : Controller
+    public class InsurancePackageController(IInsurancePackageService _service, ICategoryService _categoryService) : Controller
     {
+        public async Task GetCategories()
+        {
+            var categories = await _categoryService.TGetAllAsync();
+            ViewBag.Categories = (from category in categories
+                                  select new SelectListItem
+                                  {
+                                      Value = category.CategoryId.ToString(),
+                                      Text = category.CategoryName
+                                  }).ToList();
+        }
         public async Task<IActionResult> Index()
         {
             var values = await _service.TGetAllAsync();
@@ -14,8 +27,9 @@ namespace InsuranceCodeFirst.WebUI.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateInsurancePackage()
+        public async Task<IActionResult> CreateInsurancePackage()
         {
+            await GetCategories();
             return View();
         }
 
@@ -29,6 +43,7 @@ namespace InsuranceCodeFirst.WebUI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateInsurancePackage(int id)
         {
+            await GetCategories();
             var value = await _service.TGetByIdAsync(id);
             return View(value);
         }

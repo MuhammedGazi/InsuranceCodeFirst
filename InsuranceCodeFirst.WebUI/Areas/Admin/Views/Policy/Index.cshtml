@@ -1,0 +1,72 @@
+﻿@model List<ResultPolicyDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="card-title">Poliçe Listesi</h4>
+        <a href="/Admin/Policy/CreatePolicy" class="btn btn-outline-primary">
+            <i class="fa fa-plus"></i> Yeni Poliçe Oluştur
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Poliçe No</th>
+                        <th>Müşteri</th>
+                        <th>Sigorta Paketi</th>
+                        <th>Tarih Aralığı</th>
+                        <th>Fiyat</th>
+                        <th>Durum</th>
+                        <th style="width: 200px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.PolicyId</td>
+                            <td>@item.PolicyNumber</td>
+                            <td>
+                                @(item.Customer?.FirstName + " " + item.Customer?.LastName)
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    @item.InsurancePackage?.InsurancePackageName
+                                </span>
+                            </td>
+                            <td>
+                                @item.StartDate.ToShortDateString() - @item.EndDate.ToShortDateString()
+                            </td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="badge bg-success">Aktif</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Pasif</span>
+                                }
+                            </td>
+                            <td>
+                                <a href="/Admin/Policy/DeletePolicy/@item.PolicyId"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Bu poliçeyi silmek istediğinize emin misiniz?');">Sil</a>
+
+                                <a href="/Admin/Policy/UpdatePolicy/@item.PolicyId"
+                                   class="btn btn-warning btn-sm">Güncelle</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
