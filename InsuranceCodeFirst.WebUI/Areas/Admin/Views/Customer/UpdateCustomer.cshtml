@@ -1,0 +1,41 @@
+﻿@model UpdateCustomerDto
+@{
+    ViewData["Title"] = "UpdateCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h3>Müşteri Güncelleme</h3>
+    <form method="post">
+
+        <input type="hidden" asp-for="CustomerId" />
+
+        <div class="mb-3">
+            <label class="form-label">Ad</label>
+            <input type="text" class="form-control" asp-for="FirstName" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Soyad</label>
+            <input type="text" class="form-control" asp-for="LastName" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" asp-for="Email" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Telefon</label>
+            <input type="text" class="form-control" asp-for="Phone" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Şehir</label>
+            <input type="text" class="form-control" asp-for="City" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Güncelle</button>
+    </form>
+</div>
+
