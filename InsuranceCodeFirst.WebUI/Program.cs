@@ -1,5 +1,6 @@
 using InsuranceCodeFirst.Business.Extensions;
 using InsuranceCodeFirst.DAL.Extensions;
+using Microsoft.ML;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddRepositoriesExt(builder.Configuration)
                 .AddServiceExt();
+
+builder.Services.AddScoped<MLContext>();
 
 var app = builder.Build();
 

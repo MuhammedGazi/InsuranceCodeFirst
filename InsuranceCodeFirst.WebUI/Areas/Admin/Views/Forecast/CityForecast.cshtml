@@ -1,0 +1,260 @@
+﻿@using InsuranceCodeFirst.DTO.DTOs.ForecastData
+@model List<ForecastResultDto>
+@{
+    ViewData["Title"] = "CityForecast";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="mb-6">
+    <h2 class="text-2xl font-bold text-slate-800">2026 Yılı Yapay Zeka Satış Öngörüleri</h2>
+    <p class="text-slate-500">Bu veriler ML.NET (SSA Algoritması) kullanılarak geçmiş satış trendlerinden üretilmiştir.</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 p-6">
+        <h3 class="font-bold text-slate-900 mb-4">1. İllere Göre Kategori Tahmini</h3>
+        <div id="categoryChart" style="height: 400px;"></div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 p-6">
+        <h3 class="font-bold text-slate-900 mb-4">2. İllere Göre Paket Satış Tahmini</h3>
+        <div id="packageChart" style="height: 400px;"></div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 p-6">
+        <h3 class="font-bold text-slate-900 mb-4">3. Şehir Bazlı Toplam Satış Gücü</h3>
+        <div id="cityTotalChart" style="height: 400px;"></div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 p-6">
+        <h3 class="font-bold text-slate-900 mb-4">4. 🏆 En Çok Ciro Getirecek (İl - Paket)</h3>
+        <div id="topEarnerChart" style="height: 400px;"></div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        var rawData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+        var cities = [...new Set(rawData.map(x => x.City))].sort();
+
+        // Grafik 1 (Kategori Bazlı)
+        var categories = [...new Set(rawData.map(x => x.Category))];
+        var categorySeries = categories.map(cat => {
+            return {
+                name: cat,
+                type: 'bar',
+                stack: 'total',
+                data: cities.map(city => {
+                    var items = rawData.filter(x => x.City === city && x.Category === cat);
+                    return items.reduce((sum, item) => sum + item.ForecastedCount, 0);
+                })
+            };
+        });
+
+        // Grafik 2 (Paket Bazlı)
+        var packages = [...new Set(rawData.map(x => x.Package))];
+        var packageSeries = packages.map(pkg => {
+            return {
+                name: pkg,
+                type: 'bar',
+                stack: 'total',
+                data: cities.map(city => {
+                    var items = rawData.filter(x => x.City === city && x.Package === pkg);
+                    return items.reduce((sum, item) => sum + item.ForecastedCount, 0);
+                })
+            };
+        });
+
+        // Grafik 3 (Şehir Toplamları)
+        var cityTotals = cities.map(city => {
+            var items = rawData.filter(x => x.City === city);
+            return items.reduce((sum, item) => sum + item.ForecastedCount, 0);
+        });
+
+        // Grafik 4 (En Çok Para Kazandıranlar)
+        var revenueData = rawData.sort((a, b) => b.EstimatedRevenue - a.EstimatedRevenue).slice(0, 7); // Top 7
+        var revenueLabels = revenueData.map(x => x.City + " - " + x.Package);
+        var revenueValues = revenueData.map(x => Math.round(x.EstimatedRevenue));
+
+
+        // --------------------------------------------------------
+        // CHART 1: KATEGORİ DAĞILIMI
+        // --------------------------------------------------------
+        var catChart = echarts.init(document.getElementById('categoryChart'));
+        catChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                confine: true,
+                axisPointer: { type: 'shadow' },
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                textStyle: { color: '#333' },
+                formatter: function (params) {
+                    var html = '<div style="font-weight:bold; font-size:14px; border-bottom:1px solid #eee; margin-bottom:8px; padding-bottom:4px;">' + params[0].name + '</div>';
+
+                    var activeItems = params.filter(function(item) { return item.value > 0; });
+
+                    activeItems.sort(function(a, b) { return b.value - a.value; });
+
+                    var topItems = activeItems.slice(0, 10);
+
+                    topItems.forEach(function (item) {
+                        html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; min-width:180px;">' +
+                                '<span>' + item.marker + '<span style="font-size:12px;">' + item.seriesName + '</span></span>' +
+                                '<span style="font-weight:bold; font-size:13px; margin-left:15px;">' + item.value + '</span>' +
+                                '</div>';
+                    });
+
+                    var remaining = activeItems.length - 10;
+                    if (remaining > 0) {
+                         html += '<div style="margin-top:6px; font-size:11px; color:#666; font-style:italic; text-align:right;">+ ' + remaining + ' kategori daha...</div>';
+                    }
+
+                    if (activeItems.length === 0) html += '<span style="color:#999; font-style:italic;">Satış yok.</span>';
+
+                    return html;
+                }
+            },
+
+            legend: {
+                type: 'scroll',
+                orient: 'horizontal',
+                bottom: 0,
+                left: 'center',
+                width: '90%',
+                pageButtonGap: 20,
+                pageIconColor: '#3b82f6',
+                pageTextStyle: { color: '#666' }
+            },
+
+            grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
+            xAxis: { type: 'category', data: cities },
+            yAxis: { type: 'value' },
+            series: categorySeries
+        });
+
+        // --------------------------------------------------------
+        // CHART 2: PAKET DAĞILIMI
+        // --------------------------------------------------------
+        var pkgChart = echarts.init(document.getElementById('packageChart'));
+        pkgChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                confine: true,
+                axisPointer: { type: 'shadow' },
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                textStyle: { color: '#333' },
+
+                formatter: function (params) {
+                    var html = '<div style="font-weight:bold; font-size:14px; border-bottom:1px solid #eee; margin-bottom:8px; padding-bottom:4px;">' + params[0].name + '</div>';
+
+                    var activeItems = params.filter(function(item) {
+                        return item.value > 0;
+                    });
+
+                    activeItems.sort(function(a, b) {
+                        return b.value - a.value;
+                    });
+
+                    var top10 = activeItems.slice(0, 10);
+
+                    top10.forEach(function (item) {
+                        html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; min-width:180px;">' +
+                                '<span>' + item.marker + '<span style="font-size:12px;">' + item.seriesName + '</span></span>' +
+                                '<span style="font-weight:bold; font-size:13px; margin-left:15px;">' + item.value + '</span>' +
+                                '</div>';
+                    });
+
+                    var remaining = activeItems.length - 10;
+                    if (remaining > 0) {
+                        html += '<div style="margin-top:6px; font-size:11px; color:#666; font-style:italic; text-align:right;">' +
+                                '+ ' + remaining + ' paket daha var...' +
+                                '</div>';
+                    }
+
+                    if (activeItems.length === 0) {
+                        html += '<span style="color:#999; font-style:italic;">Bu şehirde tahmini satış yok.</span>';
+                    }
+
+                    return html;
+                }
+            },
+            legend: {
+                type: 'scroll',
+                bottom: 0,
+                pageIconColor: '#3b82f6',
+                pageTextStyle: { color: '#333' }
+            },
+            grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
+            xAxis: { type: 'category', data: cities },
+            yAxis: { type: 'value' },
+            series: packageSeries
+        });
+
+        // --------------------------------------------------------
+        // CHART 3: ŞEHİR TOPLAM SATIŞ (Bar + Line)
+        // --------------------------------------------------------
+        var cityChart = echarts.init(document.getElementById('cityTotalChart'));
+        cityChart.setOption({
+            tooltip: { trigger: 'axis' },
+            xAxis: { type: 'category', data: cities },
+            yAxis: { type: 'value' },
+            series: [{
+                data: cityTotals,
+                type: 'bar',
+                showBackground: true,
+                itemStyle: { color: '#3b82f6' },
+                label: { show: true, position: 'top' }
+            }]
+        });
+
+        // --------------------------------------------------------
+        // CHART 4: CİRO LİDERLERİ (Horizontal Bar)
+        // --------------------------------------------------------
+        var revChart = echarts.init(document.getElementById('topEarnerChart'));
+        revChart.setOption({
+            tooltip: { 
+                trigger: 'axis',
+                formatter: '{b}: {c} ₺'
+            },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            xAxis: { type: 'value' },
+            yAxis: { type: 'category', data: revenueLabels, inverse: true },
+            series: [{
+                name: 'Tahmini Ciro',
+                type: 'bar',
+                data: revenueValues,
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                        { offset: 0, color: '#10b981' }, 
+                        { offset: 1, color: '#6ee7b7' }
+                    ]),
+                    borderRadius: [0, 5, 5, 0]
+                },
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: function(params) {
+                        return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumSignificantDigits: 3 }).format(params.value);
+                    }
+                }
+            }]
+        });
+
+        window.addEventListener('resize', function() {
+            catChart.resize();
+            pkgChart.resize();
+            cityChart.resize();
+            revChart.resize();
+        });
+
+    </script>
+}
+
