@@ -10,4 +10,5 @@ public class Customer
     public string City { get; set; }
 
     public IList<Policy> Policies { get; set; }
+    public IList<Testimonial> Testimonials { get; set; }
 }
