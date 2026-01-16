@@ -1,34 +1,47 @@
-﻿
+﻿@model ResultAboutDto
 @*
     _DefaultAboutComponentPartial
 *@
+
 <div class="container-fluid bg-light about pb-5">
     <div class="container pb-5">
         <div class="row g-5">
             <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
                 <div class="about-item-content bg-white rounded p-5 h-100">
                     <h4 class="text-primary">Şirketimiz Hakkında</h4>
-                    <h1 class="display-4 mb-4">Geniş Kapsamlı Güvence ve Koruma</h1>
+
+                    <h1 class="display-4 mb-4">@Model?.Title</h1>
+
                     <p>
-                        LifeSure olarak, yılların verdiği deneyimle müşterilerimize en doğru sigorta çözümlerini sunuyoruz. Amacımız, hayatın beklenmedik sürprizlerine karşı sizi ve sevdiklerinizi güvence altına almaktır.
+                        @Model?.Description
                     </p>
-                    <p>
-                        Uzman kadromuz ve geniş hizmet ağımızla, ihtiyaçlarınıza en uygun poliçeyi belirleyerek geleceğe güvenle bakmanızı sağlıyoruz. Sizin huzurunuz, bizim önceliğimizdir.
-                    </p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Bütçenizi koruyan ekonomik çözümler.</p>
-                    <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>Hızlı ve güvenilir poliçe süreçleri.</p>
-                    <p class="text-dark mb-4"><i class="fa fa-check text-primary me-3"></i>Esnek ve kişiye özel hayat sigortası planları.</p>
-                    <a class="btn btn-primary rounded-pill py-3 px-5" href="#">Daha Fazla Bilgi</a>
+
+                    @if (!string.IsNullOrEmpty(Model?.AboutItem1))
+                    {
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>@Model.AboutItem1</p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model?.AboutItem2))
+                    {
+                        <p class="text-dark"><i class="fa fa-check text-primary me-3"></i>@Model.AboutItem2</p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model?.AboutItem3))
+                    {
+                        <p class="text-dark mb-4"><i class="fa fa-check text-primary me-3"></i>@Model.AboutItem3</p>
+                    }
+
+                    <a class="btn btn-primary rounded-pill py-3 px-5" href="/Contact/Index">Daha Fazla Bilgi</a>
                 </div>
             </div>
+
             <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.2s">
                 <div class="bg-white rounded p-5 h-100">
                     <div class="row g-4 justify-content-center">
                         <div class="col-12">
                             <div class="rounded bg-light">
-                                <img src="~/LifeSure-1.0.0/img/about-1.png" class="img-fluid rounded w-100" alt="">
+                                <img src="~/LifeSure-1.0.0/img/about-1.png" class="img-fluid rounded w-100" alt="Hakkımızda">
                             </div>
                         </div>
+
                         <div class="col-sm-6">
                             <div class="counter-item bg-light rounded p-3 h-100">
                                 <div class="counter-counting">

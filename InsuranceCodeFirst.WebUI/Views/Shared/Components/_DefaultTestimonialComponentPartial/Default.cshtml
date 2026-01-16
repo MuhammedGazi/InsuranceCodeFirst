@@ -1,7 +1,8 @@
-﻿
+﻿@model List<ResultTestimonialDto>
 @*
     _DefaultTestimonialComponentPartial
 *@
+
 <div class="container-fluid testimonial pb-5">
     <div class="container pb-5">
         <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
@@ -12,81 +13,40 @@
             </p>
         </div>
         <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.2s">
-            <div class="testimonial-item bg-light rounded">
-                <div class="row g-0">
-                    <div class="col-4 col-lg-4 col-xl-3">
-                        <div class="h-100">
-                            <img src="~/LifeSure-1.0.0/img/testimonial-1.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
-                        </div>
-                    </div>
-                    <div class="col-8 col-lg-8 col-xl-9">
-                        <div class="d-flex flex-column my-auto text-start p-4">
-                            <h4 class="text-dark mb-0">Ahmet Yılmaz</h4>
-                            <p class="mb-3">Bilgisayar Mühendisi</p>
-                            <div class="d-flex text-primary mb-3">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
+            @foreach (var item in Model)
+            {
+                <div class="testimonial-item bg-light rounded">
+                    <div class="row g-0">
+                        <div class="col-4 col-lg-4 col-xl-3">
+                            <div class="h-100">
+                                <img src="~/LifeSure-1.0.0/img/testimonial-1.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="@item.Customer?.FirstName">
                             </div>
-                            <p class="mb-0">
-                                LifeSure ile tanıştığımdan beri kendimi ve ailemi çok daha güvende hissediyorum. Hasar sürecindeki hızları ve profesyonel yaklaşımları beni çok etkiledi. Teşekkürler!
-                            </p>
+                        </div>
+                        <div class="col-8 col-lg-8 col-xl-9">
+                            <div class="d-flex flex-column my-auto text-start p-4">
+                                <h4 class="text-dark mb-0">@item.Customer?.FirstName @item.Customer?.LastName</h4>
+                                <p class="mb-3">Müşteri</p>
+
+                                <div class="d-flex text-primary mb-3">
+                                    @for (int i = 0; i < item.StarCount; i++)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
+
+                                    @for (int i = item.StarCount; i < 5; i++)
+                                    {
+                                        <i class="fas fa-star text-body"></i>
+                                    }
+                                </div>
+
+                                <p class="mb-0">
+                                    @item.Description
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="testimonial-item bg-light rounded">
-                <div class="row g-0">
-                    <div class="col-4 col-lg-4 col-xl-3">
-                        <div class="h-100">
-                            <img src="~/LifeSure-1.0.0/img/testimonial-2.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
-                        </div>
-                    </div>
-                    <div class="col-8 col-lg-8 col-xl-9">
-                        <div class="d-flex flex-column my-auto text-start p-4">
-                            <h4 class="text-dark mb-0">Ayşe Demir</h4>
-                            <p class="mb-3">Öğretmen</p>
-                            <div class="d-flex text-primary mb-3">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star text-body"></i>
-                            </div>
-                            <p class="mb-0">
-                                Uygun fiyatlı ve kapsamlı poliçeleri sayesinde hem evimi hem de arabamı güvence altına aldım. Müşteri hizmetleri her soruma sabırla cevap verdi, kesinlikle tavsiye ederim.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-item bg-light rounded">
-                <div class="row g-0">
-                    <div class="col-4 col-lg-4 col-xl-3">
-                        <div class="h-100">
-                            <img src="~/LifeSure-1.0.0/img/testimonial-3.jpg" class="img-fluid h-100 rounded" style="object-fit: cover;" alt="">
-                        </div>
-                    </div>
-                    <div class="col-8 col-lg-8 col-xl-9">
-                        <div class="d-flex flex-column my-auto text-start p-4">
-                            <h4 class="text-dark mb-0">Mehmet Öztürk</h4>
-                            <p class="mb-3">Esnaf</p>
-                            <div class="d-flex text-primary mb-3">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star text-body"></i>
-                                <i class="fas fa-star text-body"></i>
-                            </div>
-                            <p class="mb-0">
-                                İş yerim için sigorta arayışındaydım. LifeSure ekibi ihtiyaçlarımı tam olarak anlayıp bana en uygun paketi sundu. Güvenilir bir iş ortağı bulduğum için mutluyum.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>

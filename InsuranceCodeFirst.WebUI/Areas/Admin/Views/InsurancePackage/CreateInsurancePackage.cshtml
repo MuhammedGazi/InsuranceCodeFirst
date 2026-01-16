@@ -1,42 +1,62 @@
 ﻿@model CreateInsurancePackageDto
 @{
     ViewData["Title"] = "CreateInsurancePackage";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="card">
-    <div class="card-header">
-        <h4 class="card-title">Yeni Sigorta Paketi Oluştur</h4>
+<div class="max-w-3xl mx-auto">
+    <div class="mb-6">
+        <div class="flex items-center gap-2 text-sm text-slate-500 mb-2">
+            <a href="/Admin/InsurancePackage/Index" class="hover:text-primary">Paketler</a>
+            <span>/</span>
+            <span>Yeni Ekle</span>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900">Yeni Sigorta Paketi Oluştur</h2>
     </div>
-    <div class="card-body">
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 p-6 sm:p-8">
         <form method="post">
+            <div class="space-y-6">
+                
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Paket Adı</label>
+                    <input type="text" name="InsurancePackageName" class="w-full rounded-lg border-slate-200 focus:border-primary focus:ring-primary/20 transition-all text-sm py-2.5" placeholder="Örn: Tam Kapsamlı Kasko" required />
+                </div>
 
-            <div class="form-group mb-3">
-                <label class="form-label">Paket Adı</label>
-                <input type="text" class="form-control" asp-for="InsurancePackageName" placeholder="Örn: Tam Kapsamlı Kasko" />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Kategori</label>
+                        <div class="relative">
+                            <select name="CategoryId" asp-items="ViewBag.Categories" class="w-full rounded-lg border-slate-200 focus:border-primary focus:ring-primary/20 transition-all text-sm py-2.5 appearance-none bg-white">
+                                <option value="">Kategori Seçiniz</option>
+                            </select>
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-500">
+                                <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Taban Fiyat (₺)</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                                <span class="material-symbols-outlined text-[20px]">payments</span>
+                            </span>
+                            <input type="number" name="BasePrice" step="0.01" class="w-full rounded-lg border-slate-200 pl-10 focus:border-primary focus:ring-primary/20 transition-all text-sm py-2.5" placeholder="0.00" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Paket Detayları</label>
+                    <textarea name="Details" rows="5" class="w-full rounded-lg border-slate-200 focus:border-primary focus:ring-primary/20 transition-all text-sm" placeholder="Paket kapsamı ve özellikleri..." required></textarea>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-6 mt-6 border-t border-slate-100">
+                    <a href="/Admin/InsurancePackage/Index" class="px-5 py-2.5 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50 transition-colors">İptal</a>
+                    <button type="submit" class="px-5 py-2.5 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary-hover shadow-lg shadow-primary/20 transition-all">Kaydet</button>
+                </div>
             </div>
-
-            <div class="form-group mb-3">
-                <label class="form-label">Kategori</label>
-                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
-                    <option value="">-- Lütfen bir kategori seçiniz --</option>
-                </select>
-            </div>
-
-            <div class="form-group mb-3">
-                <label class="form-label">Taban Fiyat (₺)</label>
-                <input type="number" class="form-control" asp-for="BasePrice" step="0.01" />
-            </div>
-
-            <div class="form-group mb-3">
-                <label class="form-label">Detaylar / Açıklama</label>
-                <textarea class="form-control" rows="4" asp-for="Details" placeholder="Paket içeriği hakkında bilgi..."></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">
-                <i class="fa fa-save"></i> Kaydet
-            </button>
-            <a href="/Admin/InsurancePackage/Index" class="btn btn-secondary">İptal</a>
         </form>
     </div>
 </div>

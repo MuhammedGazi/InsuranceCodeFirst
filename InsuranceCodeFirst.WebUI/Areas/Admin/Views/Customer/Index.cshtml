@@ -1,42 +1,94 @@
 ﻿@model List<ResultCustomerDto>
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container mt-4">
-    <h3>Müşteri Listesi</h3>
-    <a href="/Admin/Customer/CreateCustomer" class="btn btn-info mb-3">Yeni Müşteri Ekle</a>
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Müşteri Yönetimi</h2>
+            <p class="text-slate-500 mt-1">Sistemdeki kayıtlı müşterileri buradan yönetebilirsiniz.</p>
+        </div>
+        <a href="/Admin/Customer/CreateCustomer" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium shadow-md hover:bg-primary-hover transition-all">
+            <span class="material-symbols-outlined text-[20px]">add</span> Yeni Ekle
+        </a>
+    </div>
 
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Ad</th>
-                <th>Soyad</th>
-                <th>Email</th>
-                <th>Telefon</th>
-                <th>Şehir</th>
-                <th>İşlemler</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.CustomerId</td>
-                    <td>@item.FirstName</td>
-                    <td>@item.LastName</td>
-                    <td>@item.Email</td>
-                    <td>@item.Phone</td>
-                    <td>@item.City</td>
-                    <td>
-                        <a href="/Admin/Customer/UpdateCustomer/@item.CustomerId" class="btn btn-warning btn-sm">Güncelle</a>
-                        <a href="/Admin/Customer/DeleteCustomer/@item.CustomerId" class="btn btn-danger btn-sm">Sil</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-16">ID</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Müşteri Adı</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">İletişim</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Lokasyon</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                            <td class="px-6 py-4 text-sm font-mono text-slate-500">#@item.CustomerId</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
+                                        @item.FirstName.Substring(0,1)@item.LastName.Substring(0,1)
+                                    </div>
+                                    <span class="text-sm font-semibold text-slate-900">@item.FirstName @item.LastName</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-slate-700 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[14px] text-slate-400">mail</span> @item.Email
+                                    </span>
+                                    <span class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                                        <span class="material-symbols-outlined text-[14px] text-slate-400">call</span> @item.Phone
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-600">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200">
+                                    <span class="material-symbols-outlined text-[14px]">location_on</span> @item.City
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="/Admin/Customer/UpdateCustomer/@item.CustomerId" class="p-2 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 rounded-lg transition-colors" title="Düzenle">
+                                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                                    </a>
+                                    <button onclick="confirmDelete(@item.CustomerId)" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Sil">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Müşteriyi silmek istiyor musunuz?',
+            text: "Bu işlem geri alınamaz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/Admin/Customer/DeleteCustomer/${id}`;
+            }
+        })
+    }
+</script>
 

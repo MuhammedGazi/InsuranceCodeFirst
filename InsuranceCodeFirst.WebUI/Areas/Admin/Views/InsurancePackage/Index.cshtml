@@ -1,64 +1,93 @@
 ﻿@model List<ResultInsurancePackageDto>
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Sigorta Paket Listesi</h4>
-        <a href="/Admin/InsurancePackage/CreateInsurancePackage" class="btn btn-outline-primary">
-            <i class="fa fa-plus"></i> Yeni Paket Ekle
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Sigorta Paketleri</h2>
+            <p class="text-slate-500 mt-1">Oluşturulan sigorta paketlerini ve fiyatlarını buradan yönetebilirsiniz.</p>
+        </div>
+        <a href="/Admin/InsurancePackage/CreateInsurancePackage" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium shadow-md hover:bg-primary-hover transition-all">
+            <span class="material-symbols-outlined text-[20px]">add</span> Yeni Ekle
         </a>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Paket Adı</th>
-                        <th>Kategori</th>
-                        <th>Fiyat</th>
-                        <th>Detaylar</th>
-                        <th style="width: 200px;">İşlemler</th>
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-16">ID</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Paket Adı</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Kategori</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Taban Fiyat</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Detaylar</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">İşlemler</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-100">
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>@item.InsurancePackageId</td>
-                            <td>
-                                <strong>@item.InsurancePackageName</strong>
+                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                            <td class="px-6 py-4 text-sm font-mono text-slate-500">#@item.InsurancePackageId</td>
+                            <td class="px-6 py-4">
+                                <span class="text-sm font-semibold text-slate-900 block">@item.InsurancePackageName</span>
                             </td>
-                            <td>
-                                <span class="badge bg-info text-dark">
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
                                     @item.Category?.CategoryName
                                 </span>
                             </td>
-                            <td>@item.BasePrice.ToString("C")</td>
-                            <td>@item.Details</td>
-                            <td>
-                                <a href="/Admin/InsurancePackage/DeleteInsurancePackage/@item.InsurancePackageId"
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Silmek istediğinize emin misiniz?');">Sil</a>
-
-                                <a href="/Admin/InsurancePackage/UpdateInsurancePackage/@item.InsurancePackageId"
-                                   class="btn btn-warning btn-sm">Güncelle</a>
+                            <td class="px-6 py-4">
+                                <span class="text-sm font-bold text-emerald-600">@item.BasePrice.ToString("C")</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-600">
+                                @if(!string.IsNullOrEmpty(item.Details) && item.Details.Length > 30)
+                                {
+                                    <span>@item.Details.Substring(0, 30)...</span>
+                                }
+                                else
+                                {
+                                    <span>@item.Details</span>
+                                }
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="/Admin/InsurancePackage/UpdateInsurancePackage/@item.InsurancePackageId" class="p-2 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 rounded-lg transition-colors" title="Düzenle">
+                                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                                    </a>
+                                    <button onclick="confirmDelete(@item.InsurancePackageId)" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Sil">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
-
-        @if (Model == null || !Model.Any())
-        {
-            <div class="alert alert-warning mt-3">
-                Henüz herhangi bir sigorta paketi eklenmemiş.
-            </div>
-        }
     </div>
 </div>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Paketi silmek istiyor musunuz?',
+            text: "Bu işlem geri alınamaz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/Admin/InsurancePackage/DeleteInsurancePackage/${id}`;
+            }
+        })
+    }
+</script>
 

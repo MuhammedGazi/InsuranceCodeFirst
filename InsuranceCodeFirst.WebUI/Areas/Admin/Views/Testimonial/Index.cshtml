@@ -1,0 +1,113 @@
+﻿@model List<ResultTestimonialDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Müşteri Yorumları</h2>
+            <p class="text-slate-500 mt-1">Müşterilerden gelen geri bildirimleri ve puanlamaları buradan yönetin.</p>
+        </div>
+        <a href="/Admin/Testimonial/CreateTestimonial" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium shadow-md hover:bg-primary-hover transition-all">
+            <span class="material-symbols-outlined text-[20px]">add_comment</span> Yeni Yorum Ekle
+        </a>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-16">ID</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/4">Müşteri</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-32">Puan</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Yorum</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                            <td class="px-6 py-4 text-sm font-mono text-slate-500">#@item.TestimonialId</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold">
+                                        @(item.Customer?.FirstName?.Substring(0, 1) ?? "?")
+                                    </div>
+                                    <span class="text-sm font-semibold text-slate-900">
+                                        @item.Customer?.FirstName @item.Customer?.LastName
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-0.5">
+                                    @for (int i = 0; i < item.StarCount; i++)
+                                    {
+                                        <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                    }
+
+                                    @for (int i = item.StarCount; i < 5; i++)
+                                    {
+                                        <svg class="w-5 h-5 text-slate-200 fill-current" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                    }
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-600">
+                                <div class="relative group/tooltip cursor-help">
+                                    @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 60)
+                                    {
+                                        <span>@item.Description.Substring(0, 60)...</span>
+                                        <div class="absolute bottom-full left-0 mb-2 hidden group-hover/tooltip:block w-64 p-2 bg-slate-800 text-white text-xs rounded shadow-lg z-10">
+                                            @item.Description
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Description</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="/Admin/Testimonial/UpdateTestimonial/@item.TestimonialId" class="p-2 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 rounded-lg transition-colors" title="Düzenle">
+                                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                                    </a>
+                                    <button onclick="confirmDelete(@item.TestimonialId)" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Sil">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Yorumu silmek istiyor musunuz?',
+            text: "Bu işlem geri alınamaz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/Admin/Testimonial/DeleteTestimonial/${id}`;
+            }
+        })
+    }
+</script>
+

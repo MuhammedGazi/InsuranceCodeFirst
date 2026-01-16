@@ -2,4 +2,4 @@
 
 namespace InsuranceCodeFirst.DTO.DTOs.TestimonialDtos;
 
-public record ResultTestimonialDto(int TestimonialId, int starCount, string Description, int CustomerId, ResultCustomerDto Customer);
+public record ResultTestimonialDto(int TestimonialId, int StarCount, string Description, int CustomerId, ResultCustomerDto Customer);

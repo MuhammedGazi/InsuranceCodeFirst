@@ -1,3 +1,8 @@
 ﻿namespace InsuranceCodeFirst.DTO.DTOs.FAQDtos;
 
-public record UpdateFAQDto(int FAQId, string Question, string Answer);
+public record UpdateFAQDto
+{
+    public int FAQId { get; init; }
+    public string Question { get; init; }
+    public string Answer { get; init; }
+}

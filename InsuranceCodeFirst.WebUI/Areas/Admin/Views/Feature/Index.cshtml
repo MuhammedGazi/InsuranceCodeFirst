@@ -1,0 +1,86 @@
+﻿@model List<ResultFeatureDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Öne Çıkanlar Yönetimi</h2>
+            <p class="text-slate-500 mt-1">Sitenizin "Neden Biz?" veya "Özelliklerimiz" alanlarını buradan yönetin.</p>
+        </div>
+        <a href="/Admin/Feature/CreateFeature" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium shadow-md hover:bg-primary-hover transition-all">
+            <span class="material-symbols-outlined text-[20px]">add</span> Yeni Ekle
+        </a>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-16">ID</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/3">Başlık</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Açıklama</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                            <td class="px-6 py-4 text-sm font-mono text-slate-500">#@item.FeatureId</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary/80">verified</span>
+                                    <span class="text-sm font-semibold text-slate-900">@item.Title</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-600">
+                                @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 100)
+                                {
+                                    <span>@item.Description.Substring(0, 100)...</span>
+                                }
+                                else
+                                {
+                                    <span>@item.Description</span>
+                                }
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="/Admin/Feature/UpdateFeature/@item.FeatureId" class="p-2 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 rounded-lg transition-colors" title="Düzenle">
+                                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                                    </a>
+                                    <button onclick="confirmDelete(@item.FeatureId)" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Sil">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Silmek istediğinize emin misiniz?',
+            text: "Bu özellik ana sayfadan kaldırılacaktır!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/Admin/Feature/DeleteFeature/${id}`;
+            }
+        })
+    }
+</script>
+

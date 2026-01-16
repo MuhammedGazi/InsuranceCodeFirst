@@ -22,6 +22,64 @@ namespace InsuranceCodeFirst.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.About", b =>
+                {
+                    b.Property<int>("AboutId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutId"));
+
+                    b.Property<string>("AboutItem1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AboutItem2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AboutItem3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AboutId");
+
+                    b.ToTable("Abouts");
+                });
+
+            modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.Banner", b =>
+                {
+                    b.Property<int>("BannerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BannerId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BannerId");
+
+                    b.ToTable("Banners");
+                });
+
             modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.Category", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -74,6 +132,48 @@ namespace InsuranceCodeFirst.DAL.Migrations
                     b.HasKey("CustomerId");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.FAQ", b =>
+                {
+                    b.Property<int>("FAQId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FAQId"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FAQId");
+
+                    b.ToTable("FAQs");
+                });
+
+            modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.Feature", b =>
+                {
+                    b.Property<int>("FeatureId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FeatureId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FeatureId");
+
+                    b.ToTable("Features");
                 });
 
             modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.InsurancePackage", b =>
@@ -144,6 +244,31 @@ namespace InsuranceCodeFirst.DAL.Migrations
                     b.ToTable("Policies");
                 });
 
+            modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.Service", b =>
+                {
+                    b.Property<int>("ServiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServiceId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ServiceId");
+
+                    b.ToTable("Services");
+                });
+
             modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.Testimonial", b =>
                 {
                     b.Property<int>("TestimonialId")
@@ -166,7 +291,7 @@ namespace InsuranceCodeFirst.DAL.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Testimonial");
+                    b.ToTable("Testimonials");
                 });
 
             modelBuilder.Entity("InsuranceCodeFirst.Entity.Entities.InsurancePackage", b =>

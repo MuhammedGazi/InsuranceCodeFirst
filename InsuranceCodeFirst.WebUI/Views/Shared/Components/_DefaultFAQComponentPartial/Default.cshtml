@@ -1,7 +1,8 @@
-﻿
+﻿@model List<ResultFAQDto>
 @*
     _DefaultFAQComponentPartial
 *@
+
 <div class="container-fluid faq-section bg-light py-5">
     <div class="container py-5">
         <div class="row g-5 align-items-center">
@@ -11,48 +12,39 @@
                         <h4 class="text-primary">Merak Edilenler</h4>
                         <h1 class="display-4 mb-0">Sıkça Sorulan Sorular</h1>
                     </div>
+
                     <div class="accordion" id="accordionExample">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button border-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    S: Hayat sigortası neleri kapsar?
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show active" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                <div class="accordion-body rounded">
-                                    C: Hayat sigortası, vefat durumunda lehtarlara tazminat ödenmesini kapsar. Ayrıca poliçe türüne göre kaza sonucu maluliyet, kritik hastalıklar veya tedavi masrafları gibi ek teminatlar da içerebilir. Geleceğinizi güvence altına almak için geniş kapsamlı seçenekler sunuyoruz.
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            var collapseId = "collapse" + item.FAQId;
+                            var headingId = "heading" + item.FAQId;
+
+                            var showClass = i == 0 ? "show" : "";
+                            var buttonClass = i == 0 ? "" : "collapsed";
+                            var ariaExpanded = i == 0 ? "true" : "false";
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="@headingId">
+                                    <button class="accordion-button @buttonClass border-0" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="@ariaExpanded" aria-controls="@collapseId">
+                                        @item.Question
+                                    </button>
+                                </h2>
+                                <div id="@collapseId" class="accordion-collapse collapse @showClass" aria-labelledby="@headingId" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body rounded">
+                                        @item.Answer
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    S: Poliçe iptal ve iade süreci nasıldır?
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    C: Poliçenizi satın aldıktan sonraki ilk 15 gün içinde cayma hakkınızı kullanabilirsiniz. İptal talebinizi müşteri hizmetlerimize iletmeniz durumunda, ödediğiniz primler kesintisiz olarak tarafınıza iade edilir. Daha uzun süreli iptallerde poliçe şartları geçerlidir.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingThree">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    S: Ödemelerimi nasıl yapabilirim?
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    C: Ödemelerinizi kredi kartı ile taksitli olarak veya banka havalesi yoluyla gerçekleştirebilirsiniz. Ayrıca otomatik ödeme talimatı vererek poliçe yenileme dönemlerinde kesintisiz güvence sağlamaya devam edebilirsiniz.
-                                </div>
-                            </div>
-                        </div>
+                            i++;
+                        }
                     </div>
                 </div>
             </div>
             <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                <img src="~/LifeSure-1.0.0/img/carousel-2.png" class="img-fluid w-100" alt="">
+                <img src="~/LifeSure-1.0.0/img/carousel-2.png" class="img-fluid w-100" alt="FAQ">
             </div>
         </div>
     </div>

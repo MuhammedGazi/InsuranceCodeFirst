@@ -17,12 +17,12 @@ namespace InsuranceCodeFirst.Business.Services.FAQServices
 
         public async Task TDeleteAsync(int id)
         {
-            var category = await _repository.GetByIdAsync(id);
-            if (category is null)
+            var faq = await _repository.GetByIdAsync(id);
+            if (faq is null)
             {
                 throw new Exception("FAQ Bulunamadı");
             }
-            _repository.Delete(category);
+            _repository.Delete(faq);
             await _unitOfWork.SaveChangeAsync();
         }
 

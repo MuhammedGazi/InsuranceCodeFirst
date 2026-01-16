@@ -3,7 +3,7 @@
     public class Testimonial
     {
         public int TestimonialId { get; set; }
-        public int starCount { get; set; }
+        public int StarCount { get; set; }
         public string Description { get; set; }
 
         public int CustomerId { get; set; }

@@ -12,12 +12,12 @@ namespace InsuranceCodeFirst.WebUI.Areas.Admin.Controllers
         public async Task GetCustomer()
         {
             var customers = await customerService.TGetAllAsync();
-            ViewBag.Customer = (from customer in customers
-                                select new SelectListItem
-                                {
-                                    Value = customer.CustomerId.ToString(),
-                                    Text = customer.FirstName + " " + customer.LastName
-                                }).ToList();
+            ViewBag.Customers = (from customer in customers
+                                 select new SelectListItem
+                                 {
+                                     Value = customer.CustomerId.ToString(),
+                                     Text = $"{customer.FirstName} {customer.LastName}"
+                                 }).ToList();
         }
         public async Task<IActionResult> Index()
         {

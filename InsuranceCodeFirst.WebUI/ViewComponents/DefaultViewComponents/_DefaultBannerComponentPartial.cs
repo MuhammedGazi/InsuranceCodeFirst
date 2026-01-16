@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InsuranceCodeFirst.Business.Services.BannerServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InsuranceCodeFirst.WebUI.ViewComponents.DefaultViewComponents
 {
-    public class _DefaultBannerComponentPartial : ViewComponent
+    public class _DefaultBannerComponentPartial(IBannerService service) : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View();
+            var banners = await service.TGetAllAsync();
+            var banner = banners.FirstOrDefault();
+            return View(banner);
         }
     }
 }

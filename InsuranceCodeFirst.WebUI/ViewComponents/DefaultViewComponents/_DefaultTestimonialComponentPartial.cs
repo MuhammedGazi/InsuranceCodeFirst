@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InsuranceCodeFirst.Business.Services.TestimonialServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InsuranceCodeFirst.WebUI.ViewComponents.DefaultViewComponents
 {
-    public class _DefaultTestimonialComponentPartial : ViewComponent
+    public class _DefaultTestimonialComponentPartial(ITestimonialService service) : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View();
+            var testimonial = await service.TGetAllAsync();
+            return View(testimonial);
         }
     }
 }

@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InsuranceCodeFirst.Business.Services.AboutServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InsuranceCodeFirst.WebUI.ViewComponents.DefaultViewComponents
 {
-    public class _DefaultAboutComponentPartial : ViewComponent
+    public class _DefaultAboutComponentPartial(IAboutService service) : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View();
+            var values = await service.TGetAllAsync();
+            var about = values.FirstOrDefault();
+            return View(about);
         }
     }
 }

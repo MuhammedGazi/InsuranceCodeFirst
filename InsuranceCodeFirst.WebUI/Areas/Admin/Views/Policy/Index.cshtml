@@ -1,66 +1,84 @@
 ﻿@model List<ResultPolicyDto>
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h4 class="card-title">Poliçe Listesi</h4>
-        <a href="/Admin/Policy/CreatePolicy" class="btn btn-outline-primary">
-            <i class="fa fa-plus"></i> Yeni Poliçe Oluştur
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Poliçe Yönetimi</h2>
+            <p class="text-slate-500 mt-1">Kesilen sigorta poliçelerini, vade tarihlerini ve durumlarını buradan yönetin.</p>
+        </div>
+        <a href="/Admin/Policy/CreatePolicy" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium shadow-md hover:bg-primary-hover transition-all">
+            <span class="material-symbols-outlined text-[20px]">add_circle</span> Yeni Poliçe Kes
         </a>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Poliçe No</th>
-                        <th>Müşteri</th>
-                        <th>Sigorta Paketi</th>
-                        <th>Tarih Aralığı</th>
-                        <th>Fiyat</th>
-                        <th>Durum</th>
-                        <th style="width: 200px;">İşlemler</th>
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-24">Poliçe No</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Müşteri</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Paket</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Tarih Aralığı</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Tutar</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Durum</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">İşlemler</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-100">
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>@item.PolicyId</td>
-                            <td>@item.PolicyNumber</td>
-                            <td>
-                                @(item.Customer?.FirstName + " " + item.Customer?.LastName)
+                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                            <td class="px-6 py-4">
+                                <span class="text-xs font-mono font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded">@item.PolicyNumber</span>
                             </td>
-                            <td>
-                                <span class="badge bg-secondary">
-                                    @item.InsurancePackage?.InsurancePackageName
-                                </span>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-slate-400 text-[18px]">person</span>
+                                    <span class="text-sm font-semibold text-slate-900">
+                                        @item.Customer?.FirstName @item.Customer?.LastName
+                                    </span>
+                                </div>
                             </td>
-                            <td>
-                                @item.StartDate.ToShortDateString() - @item.EndDate.ToShortDateString()
+                            <td class="px-6 py-4">
+                                <span class="text-sm text-slate-700">@item.InsurancePackage?.InsurancePackageName</span>
                             </td>
-                            <td>@item.Price.ToString("C")</td>
-                            <td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col text-xs">
+                                    <span class="text-slate-900 font-medium">@item.StartDate.ToShortDateString()</span>
+                                    <span class="text-slate-400">@item.EndDate.ToShortDateString()</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-sm font-bold text-emerald-600">@item.Price.ToString("C")</span>
+                            </td>
+                            <td class="px-6 py-4">
                                 @if (item.IsActive)
                                 {
-                                    <span class="badge bg-success">Aktif</span>
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aktif
+                                    </span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-danger">Pasif</span>
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Pasif
+                                    </span>
                                 }
                             </td>
-                            <td>
-                                <a href="/Admin/Policy/DeletePolicy/@item.PolicyId"
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Bu poliçeyi silmek istediğinize emin misiniz?');">Sil</a>
-
-                                <a href="/Admin/Policy/UpdatePolicy/@item.PolicyId"
-                                   class="btn btn-warning btn-sm">Güncelle</a>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="/Admin/Policy/UpdatePolicy/@item.PolicyId" class="p-2 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 rounded-lg transition-colors" title="Düzenle">
+                                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                                    </a>
+                                    <button onclick="confirmDelete(@item.PolicyId)" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Sil">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     }
@@ -69,4 +87,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Poliçeyi silmek istiyor musunuz?',
+            text: "Bu işlem geri alınamaz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/Admin/Policy/DeletePolicy/${id}`;
+            }
+        })
+    }
+</script>
 
