@@ -1,0 +1,119 @@
+﻿@model List<ResultContactDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">İletişim Mesajları</h2>
+            <p class="text-slate-500 mt-1">Gelen iletişim taleplerini ve AI analiz durumlarını buradan yönetebilirsiniz.</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-16">ID</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Gönderen</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">İletişim</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Mesaj</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">AI Durumu</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                            <td class="px-6 py-4 text-sm font-mono text-slate-500">#@item.ContactId</td>
+
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold uppercase">
+                                        @if (!string.IsNullOrEmpty(item.FullName))
+                                        {
+                                            @item.FullName.Substring(0, 1)
+                                        }
+                                        else
+                                        {
+                                            <span>?</span>
+                                        }
+                                    </div>
+                                    <span class="text-sm font-semibold text-slate-900">@item.FullName</span>
+                                </div>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm text-slate-700 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[14px] text-slate-400">mail</span> @item.Email
+                                    </span>
+                                    <span class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                                        <span class="material-symbols-outlined text-[14px] text-slate-400">call</span> @item.Phone
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td class="px-6 py-4 text-sm text-slate-600 max-w-xs" title="@item.Message">
+                                <span class="flex items-start gap-1">
+                                    <span class="material-symbols-outlined text-[14px] text-slate-400 mt-0.5">chat</span>
+                                    <span class="truncate block">
+                                        @(item.Message != null && item.Message.Length > 50 ? item.Message.Substring(0, 50) + "..." : item.Message)
+                                    </span>
+                                </span>
+                            </td>
+
+                            <td class="px-6 py-4 text-sm text-slate-600">
+                                @if (!string.IsNullOrEmpty(item.Status))
+                                {
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-200">
+                                        <span class="material-symbols-outlined text-[14px]">smart_toy</span> @item.Status
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 text-xs font-medium border border-slate-200">
+                                        <span class="material-symbols-outlined text-[14px]">pending</span> Analiz Edilmedi
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <button onclick="confirmDelete(@item.ContactId)" class="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Sil">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Mesajı silmek istiyor musunuz?',
+            text: "Bu işlem geri alınamaz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Buradaki URL'i kendi Controller adına göre güncelle (örn: /Admin/Contact/DeleteContact/)
+                window.location.href = `/Admin/Contacts/DeleteContact/${id}`;
+            }
+        })
+    }
+</script>
+

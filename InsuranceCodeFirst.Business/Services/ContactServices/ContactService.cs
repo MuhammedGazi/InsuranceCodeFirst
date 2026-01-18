@@ -1,4 +1,5 @@
-﻿using InsuranceCodeFirst.Business.Services.HuggingFaceServices;
+﻿using InsuranceCodeFirst.Business.Services.AIChatGptServices;
+using InsuranceCodeFirst.Business.Services.HuggingFaceServices;
 using InsuranceCodeFirst.DAL.Repositories.GenericRepositories;
 using InsuranceCodeFirst.DAL.UOW;
 using InsuranceCodeFirst.DTO.DTOs.ContactDtos;
@@ -11,7 +12,9 @@ namespace InsuranceCodeFirst.Business.Services.ContactServices
     public class ContactService(IGenericRepository<Contact> _repository,
                                 IUnitOfWork unitOfWork,
                                 ILogger<ContactService> _logger,
-                                IHuggingFaceService huggingFaceService) : IContactService
+                                IHuggingFaceService huggingFaceService,
+                                GeminiService _geminiService,
+                                EmailSender _emailSender) : IContactService
     {
         public async Task TCreateAsync(CreateContactDto dto)
         {
@@ -28,6 +31,21 @@ namespace InsuranceCodeFirst.Business.Services.ContactServices
             await _repository.CreateAsync(contact);
             await unitOfWork.SaveChangeAsync();
             _logger.LogInformation("{Id} numarasına sahip contact oluşturuldu. Durumu: {Status}", contact.ContactId, contact.Status);
+
+            try
+            {
+                var aiResponse = await _geminiService.GetAiResponseAsync(dto.Message);
+
+                string subject = "Sigorta Şirketi";
+
+                await _emailSender.SendEmailAsync(dto.Email, subject, aiResponse.ReplyBody);
+
+                _logger.LogInformation("AI cevabı {Email} adresine gönderildi.", dto.Email);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("AI/Mail sürecinde hata oluştu: {Message}", ex.Message);
+            }
         }
 
         public async Task TDeleteAsync(int id)

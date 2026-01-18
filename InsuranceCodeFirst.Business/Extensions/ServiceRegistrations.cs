@@ -1,4 +1,5 @@
-﻿using InsuranceCodeFirst.Business.Services.HuggingFaceServices;
+﻿using InsuranceCodeFirst.Business.Services.AIChatGptServices;
+using InsuranceCodeFirst.Business.Services.HuggingFaceServices;
 using InsuranceCodeFirst.Business.Services.TavilyServices;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +17,10 @@ namespace InsuranceCodeFirst.Business.Extensions
 
             services.AddHttpClient<ITavilyServices, TavilyServices>();
             services.AddHttpClient<IHuggingFaceService, HuggingFaceService>();
+
+            services.AddHttpClient<GeminiService>();
+            services.AddScoped<EmailSender>();
+
             return services;
         }
     }
