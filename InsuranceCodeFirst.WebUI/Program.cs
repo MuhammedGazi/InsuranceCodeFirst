@@ -1,10 +1,19 @@
 using InsuranceCodeFirst.Business.Extensions;
 using InsuranceCodeFirst.DAL.Extensions;
+using InsuranceCodeFirst.WebUI.Middleware;
 using Microsoft.ML;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRepositoriesExt(builder.Configuration)
@@ -15,12 +24,17 @@ builder.Services.AddScoped<MLContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Admin/AdminDashboard/Error");
+}
+else
+{
+    app.UseExceptionHandler("/Admin/AdminDashboard/Error");
     app.UseHsts();
 }
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

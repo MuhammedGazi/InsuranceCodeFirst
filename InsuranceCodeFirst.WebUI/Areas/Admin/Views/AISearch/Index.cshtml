@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .ai-box {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 16px;
+    }
+
+    .ai-card {
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,.08);
+    }
+
+    .ai-input {
+        border-radius: 12px;
+        padding: 14px;
+        font-size: 16px;
+    }
+
+    .ai-btn {
+        border-radius: 12px;
+        padding: 12px 24px;
+        font-weight: 600;
+    }
+
+    .ai-result {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 16px;
+        white-space: pre-wrap;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .fade-in {
+        animation: fadeIn .4s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(10px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+
+    }
+
+    .loader {
+        width: 20px;
+        height: 20px;
+        border: 3px solid #ddd;
+        border-top: 3px solid #0d6efd;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+
+    @@keyframes spin {
+        100%
+
+    {
+        transform: rotate(360deg);
+    }
+
+    }
+</style>
+
+<div class="ai-box mt-4">
+    <h2 class="text-center mb-4 fw-bold">🤖 AI Arama</h2>
+
+    <div class="card ai-card">
+        <div class="card-body">
+            <div class="mb-3">
+                <input type="text" id="queryInput" class="form-control ai-input"
+                       placeholder="AI'ya bir şey sor... (Örn: Sigorta nedir?)" />
+            </div>
+            <div class="d-flex justify-content-end">
+                <button id="searchBtn" class="btn btn-primary ai-btn">
+                    <span id="btnText">Ara</span>
+                    <span id="btnLoader" class="loader d-none ms-2"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultCard" class="card ai-card mt-4 d-none fade-in">
+        <div class="card-header fw-semibold">
+            📄 Sonuç
+        </div>
+        <div class="card-body">
+            <div id="resultText" class="ai-result"></div>
+        </div>
+    </div>
+
+    <div id="errorBox" class="alert alert-danger mt-3 d-none fade-in"></div>
+</div>
+
+@section Scripts {
+    <script>
+        const btn = document.getElementById("searchBtn");
+        const btnText = document.getElementById("btnText");
+        const btnLoader = document.getElementById("btnLoader");
+        const input = document.getElementById("queryInput");
+        const resultCard = document.getElementById("resultCard");
+        const resultText = document.getElementById("resultText");
+        const errorBox = document.getElementById("errorBox");
+
+        btn.addEventListener("click", sendQuery);
+        input.addEventListener("keypress", e => {
+            if (e.key === "Enter") sendQuery();
+        });
+
+        function setLoading(isLoading) {
+            btn.disabled = isLoading;
+            btnLoader.classList.toggle("d-none", !isLoading);
+            btnText.textContent = isLoading ? "Soruluyor..." : "Ara";
+        }
+
+        function sendQuery() {
+            const query = input.value.trim();
+            if (!query) return;
+
+            resultCard.classList.add("d-none");
+            errorBox.classList.add("d-none");
+            setLoading(true);
+
+            fetch("@Url.Action("Index", "AISearch", new { area = "Admin" })", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "query=" + encodeURIComponent(query)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    resultText.textContent = typeof data.data === "string"
+                        ? data.data
+                        : JSON.stringify(data.data, null, 2);
+                    resultCard.classList.remove("d-none");
+                } else {
+                    errorBox.textContent = data.message;
+                    errorBox.classList.remove("d-none");
+                }
+            })
+            .catch(() => {
+                errorBox.textContent = "İstek sırasında hata oluştu.";
+                errorBox.classList.remove("d-none");
+            })
+            .finally(() => setLoading(false));
+        }
+    </script>
+}
+
+

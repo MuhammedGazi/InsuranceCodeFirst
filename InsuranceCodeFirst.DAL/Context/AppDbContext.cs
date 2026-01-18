@@ -19,6 +19,7 @@ namespace InsuranceCodeFirst.DAL.Context
         public DbSet<Feature> Features { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Testimonial> Testimonials { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

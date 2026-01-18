@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using InsuranceCodeFirst.Business.Services.HuggingFaceServices;
+using InsuranceCodeFirst.Business.Services.TavilyServices;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace InsuranceCodeFirst.Business.Extensions
 {
@@ -12,6 +14,8 @@ namespace InsuranceCodeFirst.Business.Extensions
                           .AsImplementedInterfaces()
                           .WithScopedLifetime());
 
+            services.AddHttpClient<ITavilyServices, TavilyServices>();
+            services.AddHttpClient<IHuggingFaceService, HuggingFaceService>();
             return services;
         }
     }
