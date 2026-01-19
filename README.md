@@ -1,5 +1,4 @@
-$content = @"
-#                                                                                    🛡️ InsuranceCodeFirst Project 🚀
+#🛡️ InsuranceCodeFirst Project 🚀
 
 <div align="center">
 
