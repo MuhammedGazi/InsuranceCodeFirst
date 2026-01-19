@@ -8,7 +8,7 @@ namespace InsuranceCodeFirst.Business.Services.AIChatGptServices
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Müşteri Hizmetleri", "muhammed02selam@gmail.com"));
+            message.From.Add(new MailboxAddress("Müşteri Hizmetleri", "emailin"));
             message.To.Add(new MailboxAddress("", toEmail));
             message.Subject = subject;
 
@@ -20,7 +20,7 @@ namespace InsuranceCodeFirst.Business.Services.AIChatGptServices
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                await client.AuthenticateAsync("muhammed02selam@gmail.com", "");
+                await client.AuthenticateAsync("Emalin", "emailappşifresi");
 
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);

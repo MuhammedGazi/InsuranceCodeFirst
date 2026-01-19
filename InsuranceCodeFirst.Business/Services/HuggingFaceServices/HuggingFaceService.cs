@@ -33,9 +33,8 @@ namespace InsuranceCodeFirst.Business.Services.HuggingFaceServices
 
             try
             {
-                // Token'ını buraya ekle
                 _httpClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", "");
+                    new AuthenticationHeaderValue("Bearer", "apikeyhuggingface");
 
                 var response = await _httpClient.PostAsync(url, jsonContent);
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -46,13 +45,10 @@ namespace InsuranceCodeFirst.Business.Services.HuggingFaceServices
                     return null;
                 }
 
-                // --- DÜZELTİLEN KISIM ---
-                // Gelen veri doğrudan bir liste: [{"label":"...","score":...}, ...]
                 var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
                 var predictions = JsonSerializer.Deserialize<List<HfPrediction>>(responseString, options);
 
-                // En yüksek skorlu olan genelde ilk sıradadır ama biz yine de Score'a göre sıralayıp ilkini alalım
                 var bestPrediction = predictions?.OrderByDescending(x => x.Score).FirstOrDefault();
 
                 if (bestPrediction != null)

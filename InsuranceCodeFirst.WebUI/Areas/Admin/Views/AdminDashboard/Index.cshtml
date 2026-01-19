@@ -1,10 +1,10 @@
-﻿
+﻿@model ResultDashboardDto
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
     <div>
         <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Genel Bakış</h2>
         <p class="text-slate-500 mt-1">Tekrar hoşgeldiniz, işte LifeSure'daki son durumlar.</p>
@@ -20,33 +20,28 @@
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-blue-50 text-blue-600 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">policy</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +5%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Toplam Poliçe</p>
-            <h3 class="text-3xl font-bold text-slate-800">2,450</h3>
-        </div>
-    </div>
-
+    
     <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
         <div class="flex justify-between items-start mb-4">
             <div class="bg-indigo-50 text-indigo-600 p-3 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                 <span class="material-symbols-outlined">groups</span>
             </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +12%
-            </span>
         </div>
         <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Aktif Müşteriler</p>
-            <h3 class="text-3xl font-bold text-slate-800">1,820</h3>
+            <p class="text-slate-500 text-sm font-medium mb-1">Toplam Müşteri</p>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.CustomerCount</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-blue-50 text-blue-600 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">verified_user</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">Aktif Poliçeler</p>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.PolicyActiveCount</h3>
         </div>
     </div>
 
@@ -55,73 +50,155 @@
             <div class="bg-emerald-50 text-emerald-600 p-3 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                 <span class="material-symbols-outlined">payments</span>
             </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +8%
-            </span>
         </div>
         <div>
             <p class="text-slate-500 text-sm font-medium mb-1">Toplam Gelir</p>
-            <h3 class="text-3xl font-bold text-slate-800">₺1.2M</h3>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.PolicyPriceCount.ToString("C0")</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-purple-50 text-purple-600 p-3 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">analytics</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">Ort. Poliçe Tutarı</p>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.PolicyPriceAvgCount.ToString("C2")</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-amber-50 text-amber-600 p-3 rounded-lg group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">star</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">En Çok Satan Paket</p>
+            <h3 class="text-xl font-bold text-slate-800 truncate">@Model.PolicyMostInsurancePackageCount</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-rose-50 text-rose-600 p-3 rounded-lg group-hover:bg-rose-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">category</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">En Kârlı Kategori</p>
+            <h3 class="text-xl font-bold text-slate-800">@Model.PolicyCategoryMostPriceCount</h3>
         </div>
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
         <div class="flex justify-between items-start mb-4">
             <div class="bg-orange-50 text-orange-600 p-3 rounded-lg group-hover:bg-orange-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">pending_actions</span>
+                <span class="material-symbols-outlined">notification_important</span>
             </div>
-            <span class="flex items-center text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_down</span> -2%
-            </span>
         </div>
         <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Bekleyen İşlemler</p>
-            <h3 class="text-3xl font-bold text-slate-800">45</h3>
+            <p class="text-slate-500 text-sm font-medium mb-1">30 Gün İçinde Bitecek</p>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.PolicyEndDate</h3>
         </div>
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
         <div class="flex justify-between items-start mb-4">
-            <div class="bg-blue-50 text-blue-600 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">policy</span>
+            <div class="bg-green-50 text-green-600 p-3 rounded-lg group-hover:bg-green-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">leaderboard</span>
             </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +5%
-            </span>
         </div>
         <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Toplam Poliçe</p>
-            <h3 class="text-3xl font-bold text-slate-800">2,450</h3>
+            <p class="text-slate-500 text-sm font-medium mb-1">En Yüksek Prim</p>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.PolicyMaxPrice.ToString("C0")</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-cyan-50 text-cyan-600 p-3 rounded-lg group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">account_balance_wallet</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">Aktif Risk Bedeli</p>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.PolicyWaitPrice.ToString("C0")</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-red-50 text-red-600 p-3 rounded-lg group-hover:bg-red-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">person_celebrate</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">VIP Müşteri</p>
+            <h3 class="text-xl font-bold text-slate-800">@Model.ExpensiveCustomer</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-slate-50 text-slate-600 p-3 rounded-lg group-hover:bg-slate-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">calendar_month</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">En Yoğun Dönem</p>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.MostMonthName</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-teal-50 text-teal-600 p-3 rounded-lg group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">sell</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">En Ekonomik Poliçe No</p>
+            <h3 class="text-xl font-bold text-slate-800">@Model.PolicyMinPrice</h3>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-pink-50 text-pink-600 p-3 rounded-lg group-hover:bg-pink-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">person_off</span>
+            </div>
+        </div>
+        <div>
+            <p class="text-slate-500 text-sm font-medium mb-1">Poliçe İptal Oranı</p>
+            <h3 class="text-3xl font-bold text-slate-800">% @((Model.PolicyFalseAvgCount * 100).ToString("0.0"))</h3>
         </div>
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
         <div class="flex justify-between items-start mb-4">
             <div class="bg-indigo-50 text-indigo-600 p-3 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">groups</span>
+                <span class="material-symbols-outlined">volunteer_activism</span>
             </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +12%
-            </span>
         </div>
         <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Aktif Müşteriler</p>
-            <h3 class="text-3xl font-bold text-slate-800">1,820</h3>
+            <p class="text-slate-500 text-sm font-medium mb-1">En Sadık Müşteri (ID)</p>
+            <h3 class="text-3xl font-bold text-slate-800">#@Model.PolicyLoyaltyCustomer</h3>
         </div>
     </div>
 
     <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
         <div class="flex justify-between items-start mb-4">
-            <div class="bg-emerald-50 text-emerald-600 p-3 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">payments</span>
+            <div class="bg-amber-50 text-amber-600 p-3 rounded-lg group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined">person_search</span>
             </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +8%
-            </span>
+            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full">Fırsat</span>
         </div>
         <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Toplam Gelir</p>
-            <h3 class="text-3xl font-bold text-slate-800">₺1.2M</h3>
+            <p class="text-slate-500 text-sm font-medium mb-1">Potansiyel Müşteriler</p>
+            <h3 class="text-3xl font-bold text-slate-800">@Model.PotentialCustomerCount</h3>
         </div>
     </div>
 
@@ -130,134 +207,12 @@
             <div class="bg-orange-50 text-orange-600 p-3 rounded-lg group-hover:bg-orange-600 group-hover:text-white transition-colors">
                 <span class="material-symbols-outlined">pending_actions</span>
             </div>
-            <span class="flex items-center text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_down</span> -2%
-            </span>
         </div>
         <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Bekleyen İşlemler</p>
-            <h3 class="text-3xl font-bold text-slate-800">45</h3>
+            <p class="text-slate-500 text-sm font-medium mb-1">Sistem Durumu</p>
+            <h3 class="text-xl font-bold text-slate-800">Stabil / Aktif</h3>
         </div>
     </div>
 
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-blue-50 text-blue-600 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">policy</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +5%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Toplam Poliçe</p>
-            <h3 class="text-3xl font-bold text-slate-800">2,450</h3>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-indigo-50 text-indigo-600 p-3 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">groups</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +12%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Aktif Müşteriler</p>
-            <h3 class="text-3xl font-bold text-slate-800">1,820</h3>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-emerald-50 text-emerald-600 p-3 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">payments</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +8%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Toplam Gelir</p>
-            <h3 class="text-3xl font-bold text-slate-800">₺1.2M</h3>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-orange-50 text-orange-600 p-3 rounded-lg group-hover:bg-orange-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">pending_actions</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_down</span> -2%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Bekleyen İşlemler</p>
-            <h3 class="text-3xl font-bold text-slate-800">45</h3>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-blue-50 text-blue-600 p-3 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">policy</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +5%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Toplam Poliçe</p>
-            <h3 class="text-3xl font-bold text-slate-800">2,450</h3>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-indigo-50 text-indigo-600 p-3 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">groups</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +12%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Aktif Müşteriler</p>
-            <h3 class="text-3xl font-bold text-slate-800">1,820</h3>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-emerald-50 text-emerald-600 p-3 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">payments</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span> +8%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Toplam Gelir</p>
-            <h3 class="text-3xl font-bold text-slate-800">₺1.2M</h3>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-hover transition-all border border-slate-100 group">
-        <div class="flex justify-between items-start mb-4">
-            <div class="bg-orange-50 text-orange-600 p-3 rounded-lg group-hover:bg-orange-600 group-hover:text-white transition-colors">
-                <span class="material-symbols-outlined">pending_actions</span>
-            </div>
-            <span class="flex items-center text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full">
-                <span class="material-symbols-outlined text-[14px] mr-1">trending_down</span> -2%
-            </span>
-        </div>
-        <div>
-            <p class="text-slate-500 text-sm font-medium mb-1">Bekleyen İşlemler</p>
-            <h3 class="text-3xl font-bold text-slate-800">45</h3>
-        </div>
-    </div>
 </div>
 
