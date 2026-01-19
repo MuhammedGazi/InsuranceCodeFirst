@@ -102,6 +102,7 @@ Sistem; müşteri mesajlarını anlamlandırmak için **Hugging Face**, derinlem
 
 </div>
 ---
+
 ## 🛠 Teknolojiler
 
 | Alan | Teknoloji | Açıklama |
