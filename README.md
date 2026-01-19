@@ -1,10 +1,10 @@
-#🛡️ InsuranceCodeFirst Project 🚀
-
 <div align="center">
 
   ![Logo](https://img.shields.io/badge/INSURANCE-CODEFIRST-005571?style=for-the-badge&logo=shield&logoColor=white)
-  
-  **Yapay Zeka Destekli, N-Katmanlı ve Modern Sigortacılık Ekosistemi**
+
+  # 🛡️ InsuranceCodeFirst: Yapay Zeka Destekli Sigortacılık Ekosistemi 🚀
+
+  **Modern, Ölçeklenebilir ve AI Tabanlı Sigorta Yönetim Platformu**
 
   <p>
     <a href="#-teknolojiler">
@@ -22,12 +22,9 @@
     <a href="#-teknolojiler">
       <img src="https://img.shields.io/badge/ELK%20Stack-005571?style=flat-square&logo=elasticsearch&logoColor=white" alt="ELK Stack" />
     </a>
-    <a href="#">
-      <img src="https://img.shields.io/badge/Durum-Geliştiriliyor-orange?style=flat-square" alt="Status" />
-    </a>
   </p>
 
-  [Proje Hakkında](#-proje-hakkında) • [Özellikler](#-özellikler) • [Kurulum](#-kurulum) • [İletişim](#-iletişim)
+  [Proje Hakkında](#-proje-hakkında) • [Özellikler](#-özellikler) • [Kurulum](#-kurulum) • [Galeri](#-proje-ekran-görüntüleri)
 
 </div>
 
@@ -54,7 +51,16 @@ Sistem; müşteri mesajlarını anlamlandırmak için **Hugging Face**, derinlem
 * **Clean Architecture:** Generic Repository, Unit of Work ve Service katmanları ile sürdürülebilir kod yapısı.
 
 ---
+<div align="center">
 
+<img src="https://www.google.com/search?q=https://via.placeholder.com/1000x500%3Ftext%3DDashboard%2BGenel%2BGorunumu" alt="Dashboard" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);" />
+
+<p align="center"> <img src="https://www.google.com/search?q=https://via.placeholder.com/480x300%3Ftext%3DYapay%2BZeka%2BAnaliz%2BEkrani" alt="AI Analiz" width="48%" style="border-radius: 8px;" /> &nbsp; <img src="https://www.google.com/search?q=https://via.placeholder.com/480x300%3Ftext%3DMail%2BOtomasyonu" alt="Mail" width="48%" style="border-radius: 8px;" /> </p>
+
+<img src="https://www.google.com/search?q=https://via.placeholder.com/1000x400%3Ftext%3DKibana%2BLog%2BEkrani" alt="Kibana" width="100%" style="border-radius: 10px;" />
+
+</div>
+---
 ## 🛠 Teknolojiler
 
 | Alan | Teknoloji | Açıklama |
